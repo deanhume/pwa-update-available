@@ -1,4 +1,4 @@
-var cacheName = 'basicCacheo';
+var cacheName = 'basicCache22';
 
 self.addEventListener('install', event => {
   event.waitUntil(
