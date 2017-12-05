@@ -53,20 +53,27 @@
 <body>
   <img src="./dog-face.jpg" />
   <!-- The actual snackbar -->
-  <div id="snackbar">A new version of this app is available. Click <a href="">here</a>to update.</div>
+  <div id="snackbar">A new version of this app is available. Click <a id="reload">here</a> to update.</div>
 </body>
 <script>
+
+  let newWorker;
 
   function showUpdateBar() {
     var snackbar = document.getElementById('snackbar');
     snackbar.className = 'show';
   }
 
+  document.getElementById('reload').addEventListener('click', function(){
+    newWorker.postMessage({ action: 'skipWaiting' });
+  });
+
   if ('serviceWorker' in navigator) {
+
     navigator.serviceWorker.register('/service-worker.js').then(reg => {
       reg.addEventListener('updatefound', () => {
         // A wild service worker has appeared in reg.installing!
-        const newWorker = reg.installing;
+        newWorker = reg.installing;
 
         newWorker.addEventListener('statechange', () => {
           // Has network.state changed?
@@ -75,7 +82,6 @@
               if (navigator.serviceWorker.controller) {
                 // new update available
                 showUpdateBar();
-                console.log('show a toast', newWorker.state);
               } else {
                 // no update available
                 console.log('dont show a toast', newWorker.state);
@@ -84,6 +90,14 @@
           }
         });
       });
+    });
+
+    var refreshing;
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      console.log('controllerchange');
+      if (refreshing) return;
+      window.location.reload();
+      refreshing = true;
     });
   }
 
