@@ -1,4 +1,4 @@
-var cacheName = 'basicCache22';
+var cacheName = 'secondVersion';
 
 self.addEventListener('install', event => {
   event.waitUntil(
@@ -11,7 +11,6 @@ self.addEventListener('install', event => {
 
 self.addEventListener('message', function (event) {
   if (event.data.action === 'skipWaiting') {
-    console.log('Inside Service Worker', event.data.action);
     self.skipWaiting();
   }
 });

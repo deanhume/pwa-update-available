@@ -61,10 +61,11 @@
   let newWorker;
 
   function showUpdateBar() {
-    var snackbar = document.getElementById('snackbar');
+    let snackbar = document.getElementById('snackbar');
     snackbar.className = 'show';
   }
 
+  // The click event on the pop up notification
   document.getElementById('reload').addEventListener('click', function(){
     newWorker.postMessage({ action: 'skipWaiting' });
   });
@@ -83,19 +84,16 @@
               if (navigator.serviceWorker.controller) {
                 // new update available
                 showUpdateBar();
-              } else {
-                // no update available
-                console.log('dont show a toast', newWorker.state);
               }
+              // No update available
               break;
           }
         });
       });
     });
 
-    var refreshing;
+    let refreshing;
     navigator.serviceWorker.addEventListener('controllerchange', function () {
-      console.log('controllerchange');
       if (refreshing) return;
       window.location.reload();
       refreshing = true;
